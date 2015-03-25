@@ -1,27 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.code.gson.typeadapters</groupId>
-  <artifactId>gson-typeadapters-parent</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>android-gson-typeadapters</artifactId>
+  <packaging>jar</packaging>
+  <name>Joda Time Gson Type Adapters</name>
   <version>1.0-SNAPSHOT</version>
-  <name>Gson Type Adapters</name>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>9</version>
   </parent>
-  <url>http://code.google.com/p/google-gson/</url>
-  <description>Google Gson type adapters for third-party libraries</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <connection>scm:git:git@github.com:google-gson/typeadapters.git</connection>
     <developerConnection>scm:git:git@github.com:google-gson/typeadapters.git</developerConnection>
@@ -31,7 +22,20 @@
     <system>GitHub Issue Tracking</system>
     <url>http://github.com/google-gson/typeadapters/issues</url>
   </issueManagement>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <dependencies>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>4.1.1.4</version>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -44,24 +48,28 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.robolectric</groupId>
+      <artifactId>robolectric</artifactId>
+      <version>2.4</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
-    <sourceDirectory>${basedir}/src</sourceDirectory>
-    <testSourceDirectory>${basedir}/test</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
+          <source>1.6</source>
+          <target>1.6</target>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
+        <version>2.6</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -79,7 +87,7 @@
       <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-source-plugin</artifactId>
-         <version>2.2.1</version>
+         <version>2.4</version>
          <executions>
            <execution>
              <id>attach-sources</id>
@@ -93,7 +101,7 @@
        <plugin>
          <groupId>org.apache.maven.plugins</groupId>
          <artifactId>maven-javadoc-plugin</artifactId>
-         <version>2.9.1</version>
+         <version>2.10.2</version>
          <executions>
            <execution>
              <id>attach-javadocs</id>
@@ -113,3 +121,4 @@
     </plugins>
   </build>
 </project>
+
