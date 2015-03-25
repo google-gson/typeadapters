@@ -57,4 +57,29 @@ public class BundleTypeAdapterFactoryTest {
         assertEquals(1, bundle.getInt("a"));
         assertEquals("abcd", bundle.getString("b"));
     }
+
+    @Test
+    public void testEmpty() {
+        Bundle bundle = new Bundle();
+        String json = gson.toJson(bundle);
+        assertEquals("{}", json);
+        json = "{}";
+        bundle = gson.fromJson(json, Bundle.class);
+        assertEquals(0, bundle.size());
+    }
+
+    @Test
+    public void testBundleOfBundles() {
+        Bundle outer = new Bundle();
+        outer.putString("a", "abc");
+        Bundle inner = new Bundle();
+        inner.putString("b", "bcd");
+        outer.putParcelable("c", inner);
+        JsonObject jsonObj = gson.toJsonTree(outer).getAsJsonObject();
+        assertEquals("bcd", jsonObj.get("c").getAsJsonObject().get("b").getAsString());
+
+        String json = "{a:1,b:{c:2},c:{d:3}}";
+        Bundle bundle = gson.fromJson(json, Bundle.class);
+        assertEquals(3, ((Bundle)bundle.get("c")).get("d"));
+    }
 }

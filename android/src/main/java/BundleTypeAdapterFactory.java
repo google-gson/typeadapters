@@ -66,30 +66,36 @@ public class BundleTypeAdapterFactory implements TypeAdapterFactory {
                 case NULL:
                     in.nextNull();
                     return null;
-
                 case BEGIN_OBJECT:
-                    Bundle bundle = new Bundle();
-                    List<Pair<String, Object>> values = readObject(in);
-                    for (Pair<String, Object> entry : values) {
-                        String key = entry.first;
-                        Object value = entry.second;
-                        if (value instanceof String) {
-                            bundle.putString(key, (String) value);
-                        } else if (value instanceof Integer) {
-                            bundle.putInt(key, ((Integer)value).intValue());
-                        } else if (value instanceof Long) {
-                            bundle.putLong(key, ((Long)value).longValue());
-                        } else if (value instanceof Double) {
-                            bundle.putDouble(key, ((Double)value).doubleValue());
-                        } else if (value instanceof Parcelable) {
-                            bundle.putParcelable(key, (Parcelable)value);
-                        } else {
-                            throw new IOException("Unparcelable key, value: " + key + ", "+ value);
-                        }
-                    }
-                    return bundle;
+                    return toBundle(readObject(in));
                 default: throw new IOException("expecting object: " + in.getPath());
                 }
+            }
+
+            private Bundle toBundle(List<Pair<String, Object>> values) throws IOException {
+                Bundle bundle = new Bundle();
+                for (Pair<String, Object> entry : values) {
+                    String key = entry.first;
+                    Object value = entry.second;
+                    if (value instanceof String) {
+                        bundle.putString(key, (String) value);
+                    } else if (value instanceof Integer) {
+                        bundle.putInt(key, ((Integer)value).intValue());
+                    } else if (value instanceof Long) {
+                        bundle.putLong(key, ((Long)value).longValue());
+                    } else if (value instanceof Double) {
+                        bundle.putDouble(key, ((Double)value).doubleValue());
+                    } else if (value instanceof Parcelable) {
+                        bundle.putParcelable(key, (Parcelable)value);
+                    } else if (value instanceof List) {
+                        List<Pair<String, Object>> objectValues = (List<Pair<String, Object>>) value;
+                        Bundle subBundle = toBundle(objectValues);
+                        bundle.putParcelable(key, subBundle);
+                    } else {
+                        throw new IOException("Unparcelable key, value: " + key + ", "+ value);
+                    }
+                }
+                return bundle;
             }
 
             private List<Pair<String, Object>> readObject(JsonReader in) throws IOException {
