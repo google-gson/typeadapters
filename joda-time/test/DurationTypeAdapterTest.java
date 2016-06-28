@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Gson Type Adapter Authors.
+ * Copyright (C) 2016 Gson Type Adapter Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import static org.junit.Assert.assertEquals;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Instant;
-import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.joda.time.Duration;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link InstantTypeAdapter}.
+ * Unit tests for {@link DurationTypeAdapter}.
  *
- * @author Inderjeet Singh
+ * @author Christophe Bornet
  */
-public class InstantTypeAdapterTest {
+public class DurationTypeAdapterTest {
   private static final Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+    .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
     .create();
 
   @Test
   public void testSerialization() {
-    Instant time = new Instant(1396141013512L);
-    String json = gson.toJson(time);
-    assertEquals("\"2014-03-30T00:56:53.512Z\"", json);
+    Duration duration = Duration.millis(1396141013512L);
+    String json = gson.toJson(duration);
+    assertEquals("\"PT1396141013.512S\"", json);
   }
 
   @Test
   public void testDeserialization() {
-    Instant instant = gson.fromJson("\"2014-03-30T00:56:53.512Z\"", Instant.class);
-    assertEquals(DateTimeZone.UTC, instant.getZone());
-    assertEquals(1396141013512L, instant.getMillis());
+    Duration duration = gson.fromJson("\"PT1396141013.512S\"", Duration.class);
+    assertEquals(1396141013512L, duration.getMillis());
   }
 }

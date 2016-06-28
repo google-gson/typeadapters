@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Gson Type Adapter Authors.
+ * Copyright (C) 2016 Gson Type Adapter Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,42 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import static org.junit.Assert.assertEquals;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTimeZone;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link DateTimeTypeAdapter}.
+ * Unit tests for {@link DateMidnightTypeAdapter}.
  *
- * @author Inderjeet Singh
+ * @author Christophe Bornet
  */
-public class DateTimeTypeAdapterTest {
+public class DateMidnightTypeAdapterTest {
   private static final Gson gson = new GsonBuilder()
-    .registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter())
+    .registerTypeAdapter(DateMidnight.class, new DateMidnightTypeAdapter())
     .create();
 
   @Test
   public void testSerialization() {
-    DateTime time = new DateTime(2014, 3, 30, 0, 56, 53, 512, DateTimeZone.forID("Europe/Paris"));
+    DateMidnight time = new DateMidnight(2014, 3, 30, DateTimeZone.forID("Europe/Paris"));
     String json = gson.toJson(time);
-    assertEquals("\"2014-03-30T00:56:53.512+01:00\"", json);
+    assertEquals("\"2014-03-30T00:00:00.000+01:00\"", json);
   }
 
   @Test
   public void testDeserialization() {
-    DateTime time = gson.fromJson("\"2014-03-30T00:56:53.512+01:00\"", DateTime.class);
+    DateMidnight time = gson.fromJson("\"2014-03-30T00:00:00.000+01:00\"", DateMidnight.class);
     assertEquals(DateTimeZone.forID("Europe/Paris"), time.getZone());
     assertEquals(2014, time.getYear());
     assertEquals(3, time.getMonthOfYear());
     assertEquals(30, time.getDayOfMonth());
     assertEquals(0, time.getHourOfDay());
-    assertEquals(56, time.getMinuteOfHour());
-    assertEquals(53, time.getSecondOfMinute());
-    assertEquals(512, time.getMillisOfSecond());
+    assertEquals(0, time.getMinuteOfHour());
+    assertEquals(0, time.getSecondOfMinute());
+    assertEquals(0, time.getMillisOfSecond());
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Gson Type Adapter Authors.
+ * Copyright (C) 2016 Gson Type Adapter Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
 
-import com.google.gson.stream.JsonToken;
-import org.joda.time.DateTime;
-
-import com.google.gson.stream.JsonReader;
-
 /**
- * Type adapter for joda-time {@link DateTime} class.
+ * Abstract type adapter for jsr310 date-time types.
  *
- * @author Inderjeet Singh
+ * @author Christophe Bornet
  */
-public class DateTimeTypeAdapter extends ToStringSerializedTypeAdapter<DateTime> {
+abstract class ToStringSerializedTypeAdapter<T> extends TypeAdapter<T> {
 
   @Override
-  public DateTime read(JsonReader in) throws IOException {
-    if (in.peek() == JsonToken.NULL) {
-      in.nextNull();
-      return null;
+  public void write(JsonWriter out, T value) throws IOException {
+    if (value == null) {
+      out.nullValue();
+    } else {
+      out.value(value.toString());
     }
-    return new DateTime(in.nextString());
   }
+
 }

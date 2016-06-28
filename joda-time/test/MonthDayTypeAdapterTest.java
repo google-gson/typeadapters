@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Gson Type Adapter Authors.
+ * Copyright (C) 2016 Gson Type Adapter Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import static org.junit.Assert.assertEquals;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Instant;
-import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.joda.time.MonthDay;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link InstantTypeAdapter}.
+ * Unit tests for {@link MonthDayTypeAdapter}.
  *
- * @author Inderjeet Singh
+ * @author Christophe Bornet
  */
-public class InstantTypeAdapterTest {
+public class MonthDayTypeAdapterTest {
   private static final Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+    .registerTypeAdapter(MonthDay.class, new MonthDayTypeAdapter())
     .create();
 
   @Test
   public void testSerialization() {
-    Instant time = new Instant(1396141013512L);
-    String json = gson.toJson(time);
-    assertEquals("\"2014-03-30T00:56:53.512Z\"", json);
+    MonthDay monthDay = new MonthDay(3,30);
+    String json = gson.toJson(monthDay);
+    assertEquals("\"--03-30\"", json);
   }
 
   @Test
   public void testDeserialization() {
-    Instant instant = gson.fromJson("\"2014-03-30T00:56:53.512Z\"", Instant.class);
-    assertEquals(DateTimeZone.UTC, instant.getZone());
-    assertEquals(1396141013512L, instant.getMillis());
+    MonthDay monthDay = gson.fromJson("\"--03-30\"", MonthDay.class);
+    assertEquals(3, monthDay.getMonthOfYear());
+    assertEquals(30, monthDay.getDayOfMonth());
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Gson Type Adapter Authors.
+ * Copyright (C) 2016 Gson Type Adapter Authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,37 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import static org.junit.Assert.assertEquals;
-
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Instant;
-import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.joda.time.LocalTime;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link InstantTypeAdapter}.
+ * Unit tests for {@link LocalTimeTypeAdapter}.
  *
- * @author Inderjeet Singh
+ * @author Christophe Bornet
  */
-public class InstantTypeAdapterTest {
+public class LocalTimeTypeAdapterTest {
   private static final Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+    .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
     .create();
 
   @Test
   public void testSerialization() {
-    Instant time = new Instant(1396141013512L);
+    LocalTime time = new LocalTime(0, 56, 53, 512);
     String json = gson.toJson(time);
-    assertEquals("\"2014-03-30T00:56:53.512Z\"", json);
+    assertEquals("\"00:56:53.512\"", json);
   }
 
   @Test
   public void testDeserialization() {
-    Instant instant = gson.fromJson("\"2014-03-30T00:56:53.512Z\"", Instant.class);
-    assertEquals(DateTimeZone.UTC, instant.getZone());
-    assertEquals(1396141013512L, instant.getMillis());
+    LocalTime time = gson.fromJson("\"00:56:53.512\"", LocalTime.class);
+    assertEquals(0, time.getHourOfDay());
+    assertEquals(56, time.getMinuteOfHour());
+    assertEquals(53, time.getSecondOfMinute());
+    assertEquals(512, time.getMillisOfSecond());
   }
 }
