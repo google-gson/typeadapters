@@ -17,26 +17,15 @@ import java.io.IOException;
 
 import org.joda.time.Instant;
 
-import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
 
 /**
  * Type adapter for joda-time {@link Instant} class.
  *
  * @author Inderjeet Singh
  */
-public class InstantTypeAdapter extends TypeAdapter<Instant> {
-
-  @Override
-  public void write(JsonWriter out, Instant value) throws IOException {
-    if (value == null) {
-      out.nullValue();
-    } else {
-      out.value(value.toString());
-    }
-  }
+public class InstantTypeAdapter extends ToStringSerializedTypeAdapter<Instant> {
 
   @Override
   public Instant read(JsonReader in) throws IOException {
